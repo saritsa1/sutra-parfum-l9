@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Elemen Alpine yang disembunyikan sampai Alpine siap */
+[x-cloak] { display: none !important; }
+
+/* ===== Dasar (sama dengan index.css proyek React) ===== */
+@layer base {
+    html { scrollbar-gutter: stable; }
+
+    body {
+        background-color: #faf9f7;
+        color: #1f2326;
+        font-family: 'Jost', system-ui, sans-serif;
+        line-height: 1.65;
+    }
+
+    :focus-visible { outline: 2px solid #5a2d3f; outline-offset: 3px; }
+
+    ::placeholder { color: color-mix(in oklab, currentColor 50%, transparent); }
+}
+
+/* ===== Tombol ===== */
+@layer components {
+    .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+        border-radius: 9999px; padding: .65rem 1.5rem; font-weight: 500; cursor: pointer;
+        transition: background-color .25s, color .25s, border-color .25s, transform .2s;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn-solid { background: #1f2326; color: #fff; }
+    .btn-solid:hover { background: #5a2d3f; }
+    .btn-ghost { border: 1px solid #1f2326; }
+    .btn-ghost:hover { background: #5a2d3f; border-color: #5a2d3f; color: #fff; }
+
+    /* Kolom isian (form checkout dan ulasan) */
+    .field { width: 100%; border: 1px solid rgb(95 100 105 / .5); background: #fff; padding: .75rem; }
+    .field:focus { border-color: rgb(95 100 105 / .5); box-shadow: none; }
+
+    /* Pilihan radio (pengiriman dan pembayaran); berubah saat radio di dalamnya terpilih */
+    .choice {
+        display: flex; cursor: pointer; align-items: center; gap: .75rem;
+        border-radius: .5rem; border: 1px solid #e4e2dd; background: #fff; padding: .75rem;
+    }
+    .choice:has(input:checked) { border-color: #5a2d3f; background: #f0eeea; }
+}
+
+/* Plugin @tailwindcss/forms dipakai halaman login Breeze; di halaman toko dikembalikan ke bentuk asli */
+.sutra input, .sutra textarea, .sutra select { font: inherit; }
+.sutra input::placeholder, .sutra textarea::placeholder { color: color-mix(in oklab, currentColor 50%, transparent); opacity: 1; }
+.sutra input:focus, .sutra textarea:focus, .sutra select:focus { box-shadow: none; }
+.sutra [type='radio'], .sutra [type='checkbox'] { all: revert; margin: 0; }
+.sutra select { appearance: auto; background-image: none; padding-right: .25rem; }
+
+/* ===== Kartu produk dua sisi (efek balik) ===== */
+.perspective { perspective: 1000px; }
+.flip { transform-style: preserve-3d; transition: transform .7s cubic-bezier(.4, .2, .2, 1); }
+.flip.is-flipped { transform: rotateY(180deg); }
+.face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.face-back { transform: rotateY(180deg); }
+
+/* ===== Animasi ===== */
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes toast-in { from { opacity: 0; transform: translateY(16px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes bump { 40% { transform: scale(1.35); } }
+.rise { animation: rise .8s cubic-bezier(.2, .7, .2, 1) both; }
+.page { animation: fade .45s ease both; }
+.toast { animation: toast-in .35s cubic-bezier(.2, .7, .2, 1) both; }
+.bump { animation: bump .4s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after { animation: none !important; transition-duration: .01ms !important; }
+}
