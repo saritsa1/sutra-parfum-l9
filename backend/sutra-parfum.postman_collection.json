@@ -1,0 +1,534 @@
+{
+    "info": {
+        "name": "Sutra Parfum API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://127.0.0.1:8000/api"
+        },
+        {
+            "key": "token",
+            "value": ""
+        },
+        {
+            "key": "order_no",
+            "value": ""
+        },
+        {
+            "key": "order_id",
+            "value": ""
+        }
+    ],
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Register",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/register",
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "name",
+                                    "value": "Budi"
+                                },
+                                {
+                                    "key": "email",
+                                    "value": "budi@example.com"
+                                },
+                                {
+                                    "key": "password",
+                                    "value": "secret123"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const j = pm.response.json();",
+                                    "if (j.token) { pm.collectionVariables.set('token', j.token); }",
+                                    "pm.test('Login 200', () => pm.response.to.have.status(200));"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/login",
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "email",
+                                    "value": "admin@example.com"
+                                },
+                                {
+                                    "key": "password",
+                                    "value": "password"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/profile"
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/logout"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Products",
+            "item": [
+                {
+                    "name": "List + paginasi",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/products?per_page=5&page=1"
+                    }
+                },
+                {
+                    "name": "Cari (s)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/products?s=rose"
+                    }
+                },
+                {
+                    "name": "Filter kategori + urut harga",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/products?category_id=1&sort_by=price&order=asc"
+                    }
+                },
+                {
+                    "name": "Filter rentang harga",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/products?min_price=400000&max_price=600000"
+                    }
+                },
+                {
+                    "name": "Detail",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/products/1"
+                    }
+                },
+                {
+                    "name": "Tambah (upload gambar)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/products",
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "name",
+                                    "value": "Parfum Baru",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "category_id",
+                                    "value": "1",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "price",
+                                    "value": "350000",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "stock",
+                                    "value": "10",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "notes",
+                                    "value": "Mawar, musk",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "img",
+                                    "type": "file",
+                                    "src": []
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update (POST + _method=PUT)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/products/1",
+                        "description": "Upload file harus POST + _method=PUT (PHP tidak membaca multipart pada PUT asli).",
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "_method",
+                                    "value": "PUT",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "name",
+                                    "value": "Nama Baru",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "img",
+                                    "type": "file",
+                                    "src": []
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Hapus",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/products/1"
+                    }
+                },
+                {
+                    "name": "Tanpa token (harus 401)",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/products"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Orders (publik)",
+            "item": [
+                {
+                    "name": "Checkout (buat pesanan)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/orders",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"customer_name\": \"Budi Santoso\",\n  \"phone\": \"081234567890\",\n  \"address\": \"Jl. Merdeka No. 10, Denpasar\",\n  \"shipping_id\": \"reguler\",\n  \"payment_id\": \"bca\",\n  \"items\": [\n    {\n      \"product_id\": 1,\n      \"qty\": 2\n    },\n    {\n      \"product_id\": 2,\n      \"qty\": 1\n    }\n  ]\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Lihat pesanan (isi order_no)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/orders/{{order_no}}"
+                    }
+                },
+                {
+                    "name": "Simulasi pembayaran",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/orders/{{order_no}}/pay"
+                    }
+                },
+                {
+                    "name": "Checkout stok kurang (harus 422)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/orders",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"customer_name\": \"Budi Santoso\",\n  \"phone\": \"081234567890\",\n  \"address\": \"Jl. Merdeka No. 10, Denpasar\",\n  \"shipping_id\": \"reguler\",\n  \"payment_id\": \"cod\",\n  \"items\": [\n    {\n      \"product_id\": 1,\n      \"qty\": 20\n    }\n  ]\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Reviews",
+            "item": [
+                {
+                    "name": "Daftar ulasan produk",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/products/rose-damour/reviews"
+                    }
+                },
+                {
+                    "name": "Tambah ulasan",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/products/rose-damour/reviews",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Dewi\",\n  \"rating\": 5,\n  \"comment\": \"Wanginya lembut dan tahan lama\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Hapus ulasan (admin)",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/reviews/1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Admin (butuh token admin)",
+            "item": [
+                {
+                    "name": "Statistik dashboard",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/admin/stats"
+                    }
+                },
+                {
+                    "name": "Daftar pesanan",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/admin/orders?per_page=10"
+                    }
+                },
+                {
+                    "name": "Filter pesanan per status",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/admin/orders?status=Menunggu%20Pembayaran"
+                    }
+                },
+                {
+                    "name": "Ubah status pesanan",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/admin/orders/{{order_id}}/status",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"status\": \"Dikirim\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Batalkan pesanan (stok kembali)",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": "{{base_url}}/admin/orders/{{order_id}}/status",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"status\": \"Dibatalkan\"\n}"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
